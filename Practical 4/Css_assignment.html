@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Book Catalog</title>
+    <style>
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+        background: #f4f6f9;
+        margin: 0;
+        padding: 20px;
+        color: #333;
+      }
+
+      h1 {
+        text-align: center;
+        color: #2c3e50;
+        margin-bottom: 30px;
+      }
+
+      .book-card {
+        background: #fff;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        margin: 20px auto;
+        max-width: 600px;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .book-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+      }
+
+      .book-card h2 {
+        margin: 0;
+        font-size: 1.4rem;
+        color: #1a73e8;
+        border-bottom: 2px solid #e3e3e3;
+        padding-bottom: 5px;
+        margin-bottom: 15px;
+      }
+
+      .book-card h3 {
+        font-size: 1rem;
+        margin: 6px 0;
+        font-weight: normal;
+      }
+
+      .highlight {
+        color: #e67e22;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>JSON with JavaScript Example</h1>
+    <div id="book-container"></div>
+
+    <script>
+      var books = [
+        {
+          title: "Crash Course on Python",
+          language: "Python",
+          author: "Eric Matthes",
+          ISBN: "1593279280",
+          publish: "December 2022",
+          pubhous: "No Starch Press",
+          edi: "3rd",
+        },
+        {
+          title: "Head First JAVA",
+          language: "Java",
+          author: "Bert Bates",
+          ISBN: "978-0596009205",
+          publish: "October 1, 2005",
+          pubhous: "O'Reilly Media",
+          edi: "2nd",
+        },
+        {
+          title: "The C++ Programming Language",
+          language: "C++",
+          author: "Bjarne Stroustrup",
+          ISBN: "978-0201120783",
+          publish: "October 1985",
+          pubhous: "Addison-Wesley Publishing",
+          edi: "1st",
+        },
+        {
+          title: "Fundamentals of Computer Programming with C#",
+          language: "C#",
+          author: "Svetlin Nakov",
+          ISBN: "954-400-773-3",
+          publish: "August 31, 2013",
+          pubhous: "Faber Publishing",
+          edi: "3rd",
+        },
+        {
+          title: "Ruby by Cynthia Bond",
+          language: "Ruby",
+          author: "Cynthia Bond",
+          ISBN: "978-0804139090",
+          publish: "April 29, 2014",
+          pubhous: "Hogarth",
+          edi: "3rd",
+        },
+      ];
+
+      var container = document.getElementById("book-container");
+
+      books.forEach(function (book, index) {
+        var card = `
+        <div class="book-card">
+          <h2>Book ${index + 1}: ${book.title}</h2>
+          <h3><span class="highlight">Language:</span> ${book.language}</h3>
+          <h3><span class="highlight">Author:</span> ${book.author}</h3>
+          <h3><span class="highlight">ISBN:</span> ${book.ISBN}</h3>
+          <h3><span class="highlight">Publish Date:</span> ${book.publish}</h3>
+          <h3><span class="highlight">Publisher:</span> ${book.pubhous}</h3>
+          <h3><span class="highlight">Edition:</span> ${book.edi}</h3>
+        </div>
+      `;
+        container.innerHTML += card;
+      });
+    </script>
+  </body>
+</html>
