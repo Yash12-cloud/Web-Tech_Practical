@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Student XML DOM Example</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h2>Second Student Information</h2>
+  <button onclick="showSecondStudent()">Show 2nd Student</button>
+  <div id="output"></div>
+
+  <script>
+    // XML data (can also be loaded via fetch)
+    const xmlString = `
+      <students>
+          <student>
+              <id>1</id>
+              <name>Arjun Mehta</name>
+              <course>Computer Science</course>
+              <email>arjun.mehta@example.com</email>
+          </student>
+          <student>
+              <id>2</id>
+              <name>Sneha Reddy</name>
+              <course>Electronics</course>
+              <email>sneha.reddy@example.com</email>
+          </student>
+          <student>
+              <id>3</id>
+              <name>Vikram Singh</name>
+              <course>Mechanical</course>
+              <email>vikram.singh@example.com</email>
+          </student>
+      </students>
+    `;
+
+    function showSecondStudent() {
+      const parser = new DOMParser();
+      const xmlDoc = parser.parseFromString(xmlString, "application/xml");
+      const students = xmlDoc.getElementsByTagName("student");
+      const secondStudent = students[1];
+
+      const id = secondStudent.getElementsByTagName("id")[0].textContent;
+      const name = secondStudent.getElementsByTagName("name")[0].textContent;
+      const course = secondStudent.getElementsByTagName("course")[0].textContent;
+      const email = secondStudent.getElementsByTagName("email")[0].textContent;
+
+      document.getElementById("output").innerHTML = `
+        <p><b>ID:</b> ${id}</p>
+        <p><b>Name:</b> ${name}</p>
+        <p><b>Course:</b> ${course}</p>
+        <p><b>Email:</b> ${email}</p>
+      `;
+    }
+  </script>
+</body>
+</html>
