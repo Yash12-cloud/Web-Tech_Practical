@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CD Catalog</title>
+    <link rel="stylesheet" href="practical6.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🎵 CD Catalog</h1>
+        <button onclick="loadXMLDoc()">Get CD Catalog</button>
+        <div id="CDTable"></div>
+    </div>
+
+    <script>
+        function loadXMLDoc() {
+            const xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    cdDetails(this.responseXML);
+                }
+            };
+            xhttp.open("GET", "catalog.xml", true);
+            xhttp.send();
+        }
+
+        function cdDetails(xmlDoc) {
+            const cds = xmlDoc.getElementsByTagName("CD");
+            let table = "<table><tr><th>Title</th><th>Artist</th><th>Country</th><th>Company</th><th>Price</th><th>Year</th></tr>";
+
+            for (let i = 0; i < cds.length; i++) {
+                table += "<tr>";
+                table += "<td>" + cds[i].getElementsByTagName("TITLE")[0].textContent + "</td>";
+                table += "<td>" + cds[i].getElementsByTagName("ARTIST")[0].textContent + "</td>";
+                table += "<td>" + cds[i].getElementsByTagName("COUNTRY")[0].textContent + "</td>";
+                table += "<td>" + cds[i].getElementsByTagName("COMPANY")[0].textContent + "</td>";
+                table += "<td>" + cds[i].getElementsByTagName("PRICE")[0].textContent + "</td>";
+                table += "<td>" + cds[i].getElementsByTagName("YEAR")[0].textContent + "</td>";
+                table += "</tr>";
+            }
+
+            table += "</table>";
+            document.getElementById("CDTable").innerHTML = table;
+        }
+    </script>
+</body>
+</html>
