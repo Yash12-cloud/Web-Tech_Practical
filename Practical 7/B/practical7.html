@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dialogue Boxes Example</title>
+  <link rel="stylesheet" href="practical7.css">
+</head>
+<body>
+
+  <h1>JavaScript Dialogue Boxes</h1>
+
+  <button onclick="showAlert()">Show Alert</button>
+  <button onclick="showConfirm()">Show Confirm</button>
+  <button onclick="showPrompt()">Show Prompt</button>
+
+  <p id="result"></p>
+
+  <script>
+    function showAlert() {
+      alert("Hello! This is an Alert Box ");
+    }
+
+    function showConfirm() {
+      let choice = confirm("Do you want to continue?");
+      if (choice) {
+        document.getElementById("result").innerText = "You pressed OK ";
+      } else {
+        document.getElementById("result").innerText = "You pressed Cancel";
+      }
+    }
+
+    function showPrompt() {
+      let name = prompt("What is your name?");
+      if (name) {
+        document.getElementById("result").innerText = "Hello, " + name + "!";
+      } else {
+        document.getElementById("result").innerText = "You didn’t enter a name.";
+      }
+    }
+  </script>
+
+</body>
+</html>

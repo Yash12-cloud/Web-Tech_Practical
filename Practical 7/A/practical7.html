@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Calculator Pro</title>
+  <link rel="stylesheet" href="practical7.css">
+</head>
+<body>
+
+  <div class="calculator">
+    <div class="display-container">
+      <div class="expression" id="expression"></div>
+      <div class="display" id="display">0</div>
+    </div>
+    <div class="buttons">
+      <button class="clear" onclick="clearDisplay()">AC</button>
+      <button class="delete" onclick="deleteLastChar()">⌫</button>
+      <button class="operator" onclick="appendValue('%')">%</button>
+      <button class="operator" onclick="appendValue('/')">÷</button>
+
+      <button onclick="appendValue('7')">7</button>
+      <button onclick="appendValue('8')">8</button>
+      <button onclick="appendValue('9')">9</button>
+      <button class="operator" onclick="appendValue('*')">×</button>
+
+      <button onclick="appendValue('4')">4</button>
+      <button onclick="appendValue('5')">5</button>
+      <button onclick="appendValue('6')">6</button>
+      <button class="operator" onclick="appendValue('-')">−</button>
+
+      <button onclick="appendValue('1')">1</button>
+      <button onclick="appendValue('2')">2</button>
+      <button onclick="appendValue('3')">3</button>
+      <button class="operator" onclick="appendValue('+')">+</button>
+
+      <button class="zero" onclick="appendValue('0')">0</button>
+      <button onclick="appendValue('.')">.</button>
+      <button class="equal" onclick="calculateResult()">=</button>
+    </div>
+    <div class="history" id="history">
+      <div class="history-title">History</div>
+    </div>
+  </div>
+
+  <script>
+    const display = document.getElementById('display');
+    const expression = document.getElementById('expression');
+    const historyDiv = document.getElementById('history');
+    let currentValue = '';
+    let previousValue = '';
+    let history = [];
+
+    function appendValue(value) {
+      const lastChar = currentValue.slice(-1);
+      const operators = ['+', '-', '*', '/', '%'];
+      
+      if (operators.includes(value) && operators.includes(lastChar)) {
+        return;
+      }
+      
+      if (value === '.' && lastChar === '.') {
+        return;
+      }
+      
+      if (value === '.') {
+        const parts = currentValue.split(/[\+\-\*\/\%]/);
+        const lastPart = parts[parts.length - 1];
+        if (lastPart.includes('.')) {
+          return;
+        }
+      }
+      
+      if (currentValue === '0' && value !== '.' && !operators.includes(value)) {
+        currentValue = '';
+      }
+      
+      currentValue += value;
+      updateDisplay();
+    }
+
+    function updateDisplay() {
+      if (currentValue === '') {
+        display.textContent = '0';
+        expression.textContent = '';
+      } else {
+        display.textContent = formatDisplay(currentValue);
+        expression.textContent = formatDisplay(previousValue);
+      }
+    }
+
+    function formatDisplay(value) {
+      return value.replace(/\*/g, '×').replace(/\//g, '÷');
+    }
+
+    function clearDisplay() {
+      currentValue = '';
+      previousValue = '';
+      updateDisplay();
+    }
+
+    function deleteLastChar() {
+      currentValue = currentValue.slice(0, -1);
+      updateDisplay();
+    }
+
+    function calculateResult() {
+      if (currentValue === '') return;
+      
+      try {
+        previousValue = currentValue;
+        
+        const result = evaluateExpression(currentValue);
+        
+        if (isNaN(result) || !isFinite(result)) {
+          showError();
+          return;
+        }
+        
+        const roundedResult = Math.round(result * 100000000) / 100000000;
+        
+        addToHistory(previousValue, roundedResult);
+        
+        currentValue = roundedResult.toString();
+        updateDisplay();
+        
+      } catch (error) {
+        showError();
+      }
+    }
+
+    function evaluateExpression(expr) {
+      expr = expr.replace(/×/g, '*').replace(/÷/g, '/');
+      
+      expr = expr.replace(/[^0-9+\-*/.%()]/g, '');
+      
+      return Function('"use strict"; return (' + expr + ')')();
+    }
+
+    function showError() {
+      display.textContent = 'Error';
+      display.classList.add('error', 'shake');
+      setTimeout(() => {
+        display.classList.remove('error', 'shake');
+        clearDisplay();
+      }, 1500);
+    }
+
+    function addToHistory(expr, result) {
+      history.unshift({ expr, result });
+      if (history.length > 5) history.pop();
+      
+      renderHistory();
+    }
+
+    function renderHistory() {
+      const historyItems = history.map(item => 
+        `<div class="history-item">
+          <span>${formatDisplay(item.expr)}</span>
+          <span>= ${item.result}</span>
+        </div>`
+      ).join('');
+      
+      historyDiv.innerHTML = `
+        <div class="history-title">History</div>
+        ${historyItems}
+      `;
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key >= '0' && e.key <= '9') {
+        appendValue(e.key);
+      } else if (e.key === '.') {
+        appendValue('.');
+      } else if (e.key === '+' || e.key === '-' || e.key === '*' || e.key === '/') {
+        appendValue(e.key);
+      } else if (e.key === '%') {
+        appendValue('%');
+      } else if (e.key === 'Enter' || e.key === '=') {
+        e.preventDefault();
+        calculateResult();
+      } else if (e.key === 'Escape' || e.key === 'c' || e.key === 'C') {
+        clearDisplay();
+      } else if (e.key === 'Backspace') {
+        e.preventDefault();
+        deleteLastChar();
+      }
+    });
+
+    updateDisplay();
+  </script>
+
+</body>
+</html>
